@@ -1,0 +1,2 @@
+class ViolationReport < ApplicationRecord
+end
