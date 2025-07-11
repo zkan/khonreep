@@ -1,9 +1,55 @@
-<% content_for :title, "New violation report" %>
+<% content_for :title, "Red Light Violations 🚦" %>
 
 <div class="md:w-2/3 w-full">
-  <h1 class="font-bold text-4xl">New violation report</h1>
-
-  <%= render "form", violation_report: @violation_report %>
-
-  <%= link_to "Back to violation reports", violation_reports_path, class: "w-full sm:w-auto text-center mt-2 sm:mt-0 sm:ml-2 rounded-md px-3.5 py-2.5 bg-gray-100 hover:bg-gray-50 inline-block font-medium" %>
+  <h1 class="font-bold text-4xl">Red Light Violation 🚗</h1>
+  <button id="report-btn" type="button" class="w-full h-1/2 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-xl px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">
+    Count it!
+  </button>
+  <p id="status-msg"></p>
+  <p id="position-value"></p>
 </div>
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  const btn = document.getElementById("report-btn");
+  const status = document.getElementById("status-msg");
+  const positionValue = document.getElementById("position-value");
+
+  btn.addEventListener("click", () => {
+    if (!navigator.geolocation) {
+      status.textContent = "Geolocation is not supported by your browser.";
+      return;
+    }
+
+    navigator.geolocation.getCurrentPosition(position => {
+      console.log(position.coords.latitude, position.coords.longitude)
+      positionValue.textContent = position.coords.latitude + ", " + position.coords.longitude
+      // fetch("/violations", {
+      //   method: "POST",
+      //   headers: {
+      //     "Content-Type": "application/json",
+      //     "X-CSRF-Token": document.querySelector('meta[name="csrf-token"]').content
+      //   },
+      //   body: JSON.stringify({
+      //     violation: {
+      //       latitude: position.coords.latitude,
+      //       longitude: position.coords.longitude
+      //     }
+      //   })
+      // })
+      // .then(response => {
+      //   if (response.ok) {
+      //     status.textContent = "🚨 Violation reported!";
+      //     location.reload(); // Optional: update the list
+      //   } else {
+      //     status.textContent = "❌ Failed to report.";
+      //   }
+      // })
+      // .catch(error => {
+      //   console.error(error);
+      //   status.textContent = "❌ Error reporting violation.";
+      // });
+    });
+  });
+});
+</script>
